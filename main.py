@@ -11,10 +11,10 @@ u_key = os.getenv("USER_KEY")
 u_secret = os.getenv("USER_SECRET")
 client = ResponderClient(c_key, c_secret, u_key, u_secret)
 
+lst = {
+    'info': {
+        'DESCRIPTION': 'test'
+    }
+}
+print(client.create_list({}))
 content = client.get_lists()
-
-lists = [lst['ID'] for lst in content['LISTS']]
-views = [client.get_views(list_id) for list_id in lists]
-
-with open('.tmp', 'w', encoding='utf8') as f:
-    f.write(json.dumps(views, ensure_ascii=False, indent=2))
