@@ -34,16 +34,22 @@ class OAuth:
 class ResponderClient:
     lists_url = 'http://api.responder.co.il/main/lists'
     messages_url_template = Template('http://api.responder.co.il/main/lists/$listId/messages/$messageId')
+    views_url_template = Template('http://api.responder.co.il/main/lists/$listId/views')
 
     def __init__(self, c_key, c_secret, u_key, u_secret):
         self.oauth = OAuth(c_key, c_secret, u_key, u_secret)
-        self.auth_header = self.oauth.generate_auth_header()
+        self.auth_header = self.oauth.generate_auth_header
 
-    def get_lists(self) -> dict:
-        res = requests.get(ResponderClient.lists_url, headers=self.auth_header)
+    def get_lists(self):
+        res = requests.get(ResponderClient.lists_url, headers=self.auth_header())
         return json.loads(res.content)
 
-    def get_messages(self, list_id, message_id='') -> dict:
-        url = self.messages_url_template.substitute(listId=list_id, messageId=message_id)
-        res = requests.get(url, headers=self.auth_header)
+    def get_messages(self, list_id, message_id=''):
+        url = ResponderClient.messages_url_template.substitute(listId=list_id, messageId=message_id)
+        res = requests.get(url, headers=self.auth_header())
+        return json.loads(res.content)
+
+    def get_views(self, list_id):
+        url = ResponderClient.views_url_template.substitute(listId=list_id)
+        res = requests.get(url, headers=self.auth_header())
         return json.loads(res.content)
