@@ -10,7 +10,7 @@ u_key = os.getenv("USER_KEY")
 u_secret = os.getenv("USER_SECRET")
 client = ResponderClient(c_key, c_secret, u_key, u_secret)
 
-content = client.get_lists()
+content = client.get_messages(731735)
 if (content is None):
     print('no respone')
 with open('.tmp', 'w', encoding='utf8') as f:
