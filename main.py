@@ -8,9 +8,8 @@ c_key = os.getenv("CLIENT_KEY")
 c_secret = os.getenv("CLIENT_SECRET")
 u_key = os.getenv("USER_KEY")
 u_secret = os.getenv("USER_SECRET")
-
-
 client = ResponderClient(c_key, c_secret, u_key, u_secret)
+
 content = client.get_lists()
 if (content is None):
     print('no respone')
