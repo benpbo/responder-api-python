@@ -18,7 +18,7 @@ lst = {
     'SENDER_ADDRESS': 'somewhere'
 }
 
-data = client.delete_list(790269)
+data = client.create_list(lst)
 try:
     json = json.dumps(json.loads(data), indent=2, ensure_ascii=False)
     print(json)
