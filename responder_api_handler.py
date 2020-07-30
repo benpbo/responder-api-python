@@ -9,6 +9,8 @@ class ResponderClient:
         'http://api.responder.co.il/main/lists/$listId')
     messages_url_template = Template(
         'http://api.responder.co.il/main/lists/$listId/messages/$messageId/')
+    subscribers_url_template = Template(
+        'http://api.responder.co.il/main/lists/$listId/subscribers/')
     views_url_template = Template(
         'http://api.responder.co.il/main/lists/$listId/views/')
 
@@ -37,20 +39,51 @@ class ResponderClient:
 
     def get_messages(self, list_id, message_id=''):
         url = ResponderClient.messages_url_template.substitute(
-            listId=list_id, messageId=message_id)
+            listId=list_id,
+            messageId=message_id
+        )
         res = self.oauth.make_request(url)
         return res.content
 
     def create_message(self, list_id, data):
         url = ResponderClient.messages_url_template.substitute(
-            listId=list_id, messageId='')
+            listId=list_id,
+            messageId=''
+        )
         res = self.oauth.make_request(url, 'POST', data=data)
         return res.content
 
     def update_message(self, list_id, message_id, data):
         url = ResponderClient.messages_url_template.substitute(
-            listId=list_id, messageId=message_id)
+            listId=list_id,
+            messageId=message_id
+        )
         res = self.oauth.make_request(url, 'PUT', data=data)
+        return res.content
+
+    def test_message(self, list_id, message_id, data):
+        url = ResponderClient.messages_url_template.substitute(
+            listId=list_id,
+            messageId=message_id
+        )
+        res = self.oauth.make_request(url, 'POST', data=data, data_type='data')
+        return res.content
+
+    def delete_message(self, list_id, message_id):
+        pass
+
+    def get_subscribers(self, list_id): 
+        url = ResponderClient.subscribers_url_template.substitute(
+            listId=list_id
+        )
+        res = self.oauth.make_request(url)
+        return res.content
+
+    def create_subscribers(self, list_id, data):
+        url = ResponderClient.subscribers_url_template.substitute(
+            listId=list_id
+        )
+        res = self.oauth.make_request(url, 'POST', data=data, data_type='subscribers')
         return res.content
 
     def get_views(self, list_id):

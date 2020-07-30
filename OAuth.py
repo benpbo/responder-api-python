@@ -19,13 +19,16 @@ class OAuth:
             'Authorization': f'c_key={self.c_key},c_secret={md5((self.c_secret+nonce).encode()).hexdigest()},u_key={self.u_key},u_secret={md5((self.u_secret+nonce).encode()).hexdigest()},nonce={nonce},timestamp={timestamp}'
         }
 
-    def make_request(self, url: str, method = 'GET', **kwargs):
+    def make_request(self, url: str, method='GET', **kwargs):
         method = method.upper()
-        
+
         if 'data' in kwargs:
             data = kwargs['data']
-            return request(method, url, data=f'info={json.dumps(data)}', headers=self.generate_auth_header())
-        else: 
+            data_type = 'info'
+            if 'data_type' in kwargs:
+                data_type = kwargs['data_type']
+            return request(method, url, data=f'{data_type}={json.dumps(data)}', headers=self.generate_auth_header())
+        else:
             return request(method, url, headers=self.generate_auth_header())
 
     @staticmethod

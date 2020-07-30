@@ -19,32 +19,60 @@ lst = {
 }
 
 msg = {
-    "TYPE": "1", # 1 for "messer boded", 0 for "sidrat messarim", 2 for "mevusas ta'arich"
-    "BODY_TYPE": "0", # 0 for regular HTML editor(affects the type of editor used in the website)
+    "TYPE": "1",  # 1 for "messer boded", 0 for "sidrat messarim", 2 for "mevusas ta'arich"
+    # 0 for regular HTML editor(affects the type of editor used in the website)
+    "BODY_TYPE": "0",
     "SUBJECT": 'message subject2',
     "BODY": 'message HTML body',
-    "FILTER": "", # -optional - the view id "kvuzat mishloah"
-    'LANGUAGE': "hebrew", # -optional - defaults to 'english'
+    "FILTER": "",  # -optional - the view id "kvuzat mishloah"
+    'LANGUAGE': "hebrew",  # -optional - defaults to 'english'
     'CHECK_LINKS': "1"
 }
 msg_update = {
     'LANGUAGE': 'english'
 }
+
+subscribers = [
+    {
+        "NAME": "John Smith",
+        "EMAIL": "johnsmith@gmail.com",
+        "DAY": 12,
+        # parameter for email's notification for the user about new subscriber. (0 - don't notify / 1 - notify / 2 - according to list's settings)
+        "NOTIFY": 2
+    },
+    {
+        "NAME": "Bob Jones",
+        "EMAIL": "bobjones@yahoo.com",
+        # parameter for email's notification for the user about new subscriber. (0 - don't notify / 1 - notify / 2 - according to list's settings)
+        "NOTIFY": 0
+    },
+    {
+        'NAME': 'Ben Prize',
+        'EMAIL': 'prizeben@gmail.com'
+    }
+]
 list_id = 0
 for lst in json.loads(client.get_lists())['LISTS']:
     if lst['DESCRIPTION'] == 'test':
         list_id = lst['ID']
         break
 
-#list_id = json.loads(client.create_list(lst))['LIST_ID']
-#data = client.create_message(list_id, msg)
-
 message_id = 0
 for msg in json.loads(client.get_messages(list_id)):
     if msg['SUBJECT'] == 'test message':
         message_id = msg['ID']
-    
-data = client.update_message(list_id, message_id, msg_update)
+        break
+
+email = ''
+for subscriber in json.loads(client.get_subscribers(list_id)):
+    if subscriber['NAME'] == 'Ben Prize':
+        email = subscriber['EMAIL']
+
+msg_test = {
+    'email': email
+}
+data = client.test_message(list_id, message_id, msg_test)
+
 try:
     json = json.dumps(json.loads(data), indent=2, ensure_ascii=False)
     print(json)
