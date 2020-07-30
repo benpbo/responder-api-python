@@ -72,7 +72,7 @@ class ResponderClient:
     def delete_message(self, list_id, message_id):
         pass
 
-    def get_subscribers(self, list_id): 
+    def get_subscribers(self, list_id):
         url = ResponderClient.subscribers_url_template.substitute(
             listId=list_id
         )
@@ -83,7 +83,18 @@ class ResponderClient:
         url = ResponderClient.subscribers_url_template.substitute(
             listId=list_id
         )
-        res = self.oauth.make_request(url, 'POST', data=data, data_type='subscribers')
+        res = self.oauth.make_request(
+            url, 'POST', data=data, data_type='subscribers'
+        )
+        return res.content
+
+    def delete_subscribers(self, list_id, subscribers):
+        url = ResponderClient.subscribers_url_template.substitute(
+            listId=list_id
+        )
+        res = self.oauth.make_request(
+            url, 'DELETE', data=subscribers, data_type='subscribers'
+        )
         return res.content
 
     def get_views(self, list_id):

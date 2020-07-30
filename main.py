@@ -13,7 +13,7 @@ client = ResponderClient(c_key, c_secret, u_key, u_secret)
 
 lst = {
     'DESCRIPTION': 'test',
-    'SENDER_NAME': 'ben',
+    'SENDER_NAME': 'tester',
     'SENDER_EMAIL': 'prizeben@gmail.com',
     'SENDER_ADDRESS': 'somewhere'
 }
@@ -47,7 +47,7 @@ subscribers = [
         "NOTIFY": 0
     },
     {
-        'NAME': 'Ben Prize',
+        'NAME': 'tester',
         'EMAIL': 'prizeben@gmail.com'
     }
 ]
@@ -65,14 +65,12 @@ for msg in json.loads(client.get_messages(list_id)):
 
 email = ''
 for subscriber in json.loads(client.get_subscribers(list_id)):
-    if subscriber['NAME'] == 'Ben Prize':
+    if subscriber['NAME'] == 'user':
         email = subscriber['EMAIL']
+        break
+msg_test = {'email': email}
 
-msg_test = {
-    'email': email
-}
-data = client.test_message(list_id, message_id, msg_test)
-
+data = client.get_subscribers(list_id)
 try:
     json = json.dumps(json.loads(data), indent=2, ensure_ascii=False)
     print(json)
